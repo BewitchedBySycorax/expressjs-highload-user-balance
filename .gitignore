@@ -1,0 +1,39 @@
+# Apple Desktop Services Store
+.DS_Store
+
+# Backup files and directories
+*_backup*
+*-backup*
+.backup
+
+# Dotenv environment variable files
+.env*
+!.env.template*
+
+# Transpiled files
+build/
+dist/
+
+# Dependencies
+node_modules/
+
+# Technical documents
+docs/
+
+# Develop debug logging directory
+log/*
+logs/*
+
+# Temp working directory
+temp/
+tmp/
+*-temp*
+*_temp*
+.temp
+.tmp
+
+# Versioned dependency tree
+# package-lock.json
+
+# VS Code IDE debug configuration
+.vscode/

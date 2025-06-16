@@ -1,0 +1,28 @@
+{
+  "name": "node.js-highload-app-1",
+  "version": "1.0.0",
+  "description": "A simple web application to manage user balances.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev:db:create": "NODE_ENV=development npx sequelize-cli db:create",
+    "dev": "NODE_ENV=development node --watch --env-file=.env src/index.js",
+    "start": "NODE_ENV=development node --env-file=.env src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BewitchedBySycorax/node.js-highload-app-1.git"
+  },
+  "author": "Aleksei V. <al.voitovskii@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BewitchedBySycorax/node.js-highload-app-1/issues"
+  },
+  "homepage": "https://github.com/BewitchedBySycorax/node.js-highload-app-1#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.0",
+    "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.2",
+    "umzug": "^3.8.2"
+  }
+}
