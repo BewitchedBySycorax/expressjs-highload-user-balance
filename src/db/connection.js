@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+const { Umzug, SequelizeStorage } = require('umzug');
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('./config/config.json')[env];
@@ -8,42 +9,55 @@ const sequelize = new Sequelize(
   config.username,
   config.password,
   {
+    host: config.host,
     dialect: config.dialect,
     // dialectOptions: {},
   }
 );
 
-module.exports = sequelize;
-
-
-// const createDatabaseIfNotExists = async () => {
-//   const client = new Client({
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     host: process.env.DB_HOST,
-//     port: process.env.DB_PORT,
-//     database: process.env.DB_NAME,
+// sequelize.authenticate()
+//   .then(() => {
+//     console.log('Connection to the database has been established successfully.');
+//   })
+//   .catch(err => {
+//     console.error('Unable to connect to the database:', err);
 //   });
 
-//   try {
-//     await client.connect();
-//     const dbName = process.env.DB_NAME;
+const dbConnect = async () => {
+  await sequelize.sync({ logging: false });
 
-//     const res = await client.query(`SELECT 1 FROM pg_database WHERE datname = $1`, [dbName]);
-//     if (res.rowCount === 0) {
-//       await client.query(`CREATE DATABASE "${dbName}"`);
-//       console.log(`Database "${dbName}" created successfully.`);
-//     } else {
-//       console.log(`Database "${dbName}" already exists.`);
-//     }
-//   } catch (e) {
-//     console.error('Error creating database:', e)
-//     process.exit(1)
-//   } finally {
-//     await client.end();
-//   }
-// }
+  try {
+    await sequelize.authenticate({ logging: false });
+    console.log('Connection to the database has been established successfully.');
+  } catch (e) {
+    console.error('Unable to connect to the database:', e);
+  }
+};
 
-// module.exports = {
-// 	createDatabaseIfNotExists,
-// }
+const dbRunMigrations = async () => {
+  // https://github.com/sequelize/umzug
+  const umzug = new Umzug({
+    migrations: {
+      glob: 'src/db/migrations/*.js',
+    },
+    context: sequelize.getQueryInterface(),
+    storage: new SequelizeStorage({ sequelize }),
+    // logger: undefined, // FIXME: Doesn't work
+    // logger: false,     // FIXME: Doesn't work
+    logger: console,
+  })
+
+  try {
+    await umzug.up();
+    console.log('Migrations completed.');
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
+};
+
+module.exports = {
+  dbConnect,
+  dbRunMigrations,
+  sequelize,
+};

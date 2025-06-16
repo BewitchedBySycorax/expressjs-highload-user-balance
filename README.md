@@ -37,16 +37,25 @@ node.js-highload-app-1
    npm install
    ```
 
-3. **Configure the database**
-   Update the `src/db/connection.js` file with your PostgreSQL database credentials.
+3. **Configure the database access parameters**
+   Update the `src/db/config.json` file with your PostgreSQL database credentials.
 
-4. **Run migrations**
+4. **Create new database**
+   Run the following command in terminal window:
+   ```
+   npm run dev:db:create
+   ```
+
+5. **Run migrations**
    To create the `users` table in the database, run:
+
+   !!! TODO: npm run instead of npx sequelize-cli... !!!
+
    ```
    npx sequelize-cli db:migrate
    ```
 
-5. **Start the application**
+6. **Start the application**
    ```
    npm start
    ```
