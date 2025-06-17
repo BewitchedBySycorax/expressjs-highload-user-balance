@@ -1,11 +1,11 @@
-# node.js-highload-app-1 documentation
+# expressjs-highload-user-balance documentation
 
 ## Overview
 This project is a simple web application built using Node.js and Express. It provides functionality to manage user balances stored in a PostgreSQL database using Sequelize ORM. The application supports real-time updates to user balances while ensuring that the balance does not fall below zero.
 
 ## Project Structure
 ```
-node.js-highload-app-1
+expressjs-highload-user-balance
 ├── src
 │   ├── index.js                # Entry point of the application
 │   ├── app.js                  # Core of application
@@ -29,7 +29,7 @@ node.js-highload-app-1
 1. **Clone the repository**
    ```
    git clone <repository-url>
-   cd node.js-highload-app-1
+   cd expressjs-highload-user-balance
    ```
 
 2. **Install dependencies**
@@ -46,18 +46,9 @@ node.js-highload-app-1
    npm run dev:db:create
    ```
 
-5. **Run migrations**
-   To create the `users` table in the database, run:
-
-   !!! TODO: npm run instead of npx sequelize-cli... !!!
-
+5. **Start the application**
    ```
-   npx sequelize-cli db:migrate
-   ```
-
-6. **Start the application**
-   ```
-   npm start
+   npm run dev
    ```
 
 ## Usage
@@ -71,6 +62,19 @@ node.js-highload-app-1
 
 ## Testing
 The application has been designed to handle concurrent requests efficiently. It has been tested to ensure that it can handle 10,000 simultaneous requests to withdraw 2 units from a user's balance, with at least 5,000 requests succeeding while the rest receive an appropriate error message for insufficient funds.
+
+!!! RENAME TO express.js (and all of linked in files)
+!!! TODO: Optional:
+**Manually run migrations**
+   To create the `users` table in the database, run:
+
+   !!! TODO: npm run instead of npx sequelize-cli... !!!
+
+   ```
+   npx sequelize-cli db:migrate
+   ```
+
+   /api/users
 
 ## License
 This project is licensed under the MIT License.

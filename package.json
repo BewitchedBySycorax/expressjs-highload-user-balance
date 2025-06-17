@@ -1,5 +1,5 @@
 {
-  "name": "node.js-highload-app-1",
+  "name": "expressjs-highload-user-balance",
   "version": "1.0.0",
   "description": "A simple web application to manage user balances.",
   "main": "src/index.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BewitchedBySycorax/node.js-highload-app-1.git"
+    "url": "git+https://github.com/BewitchedBySycorax/expressjs-highload-user-balance.git"
   },
   "author": "Aleksei V. <al.voitovskii@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/BewitchedBySycorax/node.js-highload-app-1/issues"
+    "url": "https://github.com/BewitchedBySycorax/expressjs-highload-user-balance/issues"
   },
-  "homepage": "https://github.com/BewitchedBySycorax/node.js-highload-app-1#readme",
+  "homepage": "https://github.com/BewitchedBySycorax/expressjs-highload-user-balance#readme",
   "dependencies": {
     "express": "^5.1.0",
     "pg": "^8.16.0",

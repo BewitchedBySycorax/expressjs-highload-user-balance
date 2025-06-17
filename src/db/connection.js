@@ -16,14 +16,6 @@ const sequelize = new Sequelize(
   },
 );
 
-// sequelize.authenticate()
-//   .then(() => {
-//     console.log('Connection to the database has been established successfully.');
-//   })
-//   .catch(err => {
-//     console.error('Unable to connect to the database:', err);
-//   });
-
 const dbConnect = async () => {
   await sequelize.sync({ logging: false });
 
@@ -36,7 +28,9 @@ const dbConnect = async () => {
 };
 
 const dbRunMigrations = async () => {
-  // https://github.com/sequelize/umzug
+  /**
+   * https://github.com/sequelize/umzug
+   */
   const umzug = new Umzug({
     migrations: {
       glob: 'src/db/migrations/*.js',
