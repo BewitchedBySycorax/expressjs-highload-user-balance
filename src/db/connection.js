@@ -12,7 +12,8 @@ const sequelize = new Sequelize(
     host: config.host,
     dialect: config.dialect,
     // dialectOptions: {},
-  }
+    logging: false
+  },
 );
 
 // sequelize.authenticate()
@@ -42,9 +43,12 @@ const dbRunMigrations = async () => {
     },
     context: sequelize.getQueryInterface(),
     storage: new SequelizeStorage({ sequelize }),
-    // logger: undefined, // FIXME: Doesn't work
-    // logger: false,     // FIXME: Doesn't work
-    logger: console,
+    /**
+     * NOTE: logger in new Sequelize() from above has more priority
+     */
+    // logger: console,
+    // logger: undefined,
+    // logger: false,
   })
 
   try {
