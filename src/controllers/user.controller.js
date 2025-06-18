@@ -1,3 +1,20 @@
+const { getOneUserById, updateOneUserById } = require('../services/user.service');
+
+// ? TODO: сделать средствами sequelize - получить balance
+const getBalance = async (req, res) => {
+	const { userId } = req.params;
+
+	try {
+		const user = await getOneUserById(userId);
+
+		res.status(200).json({ balance: user?.balance });
+	} catch (e) {
+		// next(e); // TODO:
+		res.status(500).json({ error: 'An error occurred while updating balance' });
+	}
+};
+
+// ? TODO: сделать средствами sequelize - получить balance
 const updateBalance = async (req, res) => {
 	const { userId, amount } = req.body;
 
@@ -6,9 +23,9 @@ const updateBalance = async (req, res) => {
 	}
 
 	try {
-		const user = await this.userModel.findByPk(userId);
+		const user = await getOneUserById(userId);
 		if (!user) {
-			return res.status(404).json({ error: 'User not found' });
+			return res.status(404).json({ error: `User with id ${userId} not found` });
 		}
 
 		const newBalance = user.balance + amount;
@@ -22,10 +39,12 @@ const updateBalance = async (req, res) => {
 
 		res.status(200).json({ balance: user.balance });
 	} catch (e) {
+		// next(e); // TODO:
 		res.status(500).json({ error: 'An error occurred while updating balance' });
 	}
-}
+};
 
 module.exports = {
+	getBalance,
 	updateBalance,
 }

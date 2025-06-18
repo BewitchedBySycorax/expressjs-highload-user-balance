@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== 'production') {
 	});
 }
 
-(async () => {
+;(async () => {
 	try {
 		const PORT = process.env.PORT || 3000;
 

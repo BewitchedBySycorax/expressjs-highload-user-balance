@@ -1,11 +1,10 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const router = express.Router();
 
-const { userController } = require('../controllers')
+const { userController } = require('../controllers');
 
-router.put('/users/:userId/balance', userController.updateBalance)
-// TODO:
-// router.put('/users/:userId/balance', userController.updateBalance.bind(userController))
+router.get('/:userId/balance', userController.getBalance);
+router.put('/:userId/balance', userController.updateBalance);
 
-module.exports = router
+module.exports = router;
