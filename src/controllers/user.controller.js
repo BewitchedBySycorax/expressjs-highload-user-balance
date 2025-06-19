@@ -1,4 +1,4 @@
-const { getOneUserById, updateOneUserById } = require('../services/user.service');
+const userService = require('../services/user.service');
 // const { isValidNumber } = require('../validators');
 const { ERROR_MESSAGES } = require('../errors/messages.errors');
 
@@ -11,12 +11,34 @@ const getBalance = async (req, res) => {
 	}
 
 	try {
-		const user = await getOneUserById(userId);
+		const user = await userService.getOneUserById(userId);
+
 		if (!user) {
 			return res.status(404).json({ error: ERROR_MESSAGES.ENTITY_NOT_FOUND('user', userId) });
 		}
 
-		res.status(200).json({ balance: user?.balance });
+		res.status(200).json({ balance: user.balance });
+	} catch (e) {
+		// next(e); // TODO:
+		res.status(500).json({ error: ERROR_MESSAGES.INTERNAL_SERVER() });
+	}
+};
+
+const _getBalance = async (req, res) => {
+	const { userId } = req.params;
+
+	// if (!isValidNumber(userId)) {
+	if (isNaN(userId)) {
+		return res.status(400).json({ error: ERROR_MESSAGES.INVALID_PARAMETER('userId', userId) });
+	}
+
+	try {
+		const balance = (await userService.getUserBalance(userId))?.balance;
+		if (!balance) {
+			return res.status(404).json({ error: ERROR_MESSAGES.ENTITY_NOT_FOUND('user', userId) });
+		}
+
+		res.status(200).json({ balance });
 	} catch (e) {
 		// next(e); // TODO:
 		res.status(500).json({ error: ERROR_MESSAGES.INTERNAL_SERVER() });
@@ -39,19 +61,11 @@ const updateBalance = async (req, res) => {
 	}
 
 	try {
-		const user = await getOneUserById(userId);
-		if (!user) {
-			return res.status(404).json({ error: ERROR_MESSAGES.ENTITY_NOT_FOUND('user', userId) });
-		}
+		await userService.updateUserBalance(userId, amount);
 
-		const newBalance = user.balance + amount;
+		console.log(1)
 
-		if (newBalance < 0) {
-			return res.status(400).json({ error: ERROR_MESSAGES.INVALID_BALANCE_VALUE() });
-		}
-
-		user.balance = newBalance;
-		await user.save();
+		const user = await userService.getOneUserById(userId);
 
 		res.status(200).json({ balance: user.balance });
 	} catch (e) {

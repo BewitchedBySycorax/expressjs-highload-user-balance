@@ -57,5 +57,5 @@ const dbRunMigrations = async () => {
 module.exports = {
   dbConnect,
   dbRunMigrations,
-  sequelize,
+  // sequelize,
 };

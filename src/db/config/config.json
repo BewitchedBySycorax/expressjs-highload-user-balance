@@ -4,7 +4,8 @@
     "password": null,
     "database": "node_js_highload_app_1_development",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": "false"
   },
   "test": {
     "username": "postgres",

@@ -2,19 +2,13 @@ const axios = require('axios');
 
 const BASE_URL = 'http://localhost:12804/api/users';
 const USER_ID = 1;
-// const REQUEST_COUNT = 10000;
-const REQUEST_COUNT = 20;
+const REQUEST_COUNT = 10000;
+// const REQUEST_COUNT = 20;
 const AMOUNT = -2;
 
 async function sendRequest() {
   try {
-    const response = await axios.put(
-      `${BASE_URL}/${USER_ID}/balance`,
-      {
-        amount: AMOUNT,
-        increase: true
-      }
-    );
+    const response = await axios.put(`${BASE_URL}/${USER_ID}/balance`, { amount: AMOUNT });
 
     return { success: true, data: response.data };
   } catch (e) {
