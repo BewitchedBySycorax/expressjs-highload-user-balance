@@ -2,6 +2,7 @@ const { User } = require('../db/models');
 
 const getOneUserById = async (userId) => {
   try {
+    // return await User.findByPk(userId, { attributes: ['balance'] });
     return await User.findByPk(userId);
   } catch (e) {
     // console.error(e);

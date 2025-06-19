@@ -24,5 +24,8 @@
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.2",
     "umzug": "^3.8.2"
+  },
+  "devDependencies": {
+    "axios": "^1.10.0"
   }
 }
