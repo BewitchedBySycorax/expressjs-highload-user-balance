@@ -8,11 +8,11 @@ const AMOUNT = -2;
 
 async function sendRequest() {
   try {
-    const response = await axios.put(`${BASE_URL}/${USER_ID}/balance`, { amount: AMOUNT });
+    const response = await axios.patch(`${BASE_URL}/${USER_ID}/balance`, { amount: AMOUNT });
 
     return { success: true, data: response.data };
   } catch (e) {
-    return { success: false, error: e.response?.data || e.message };
+    return { success: false, error: e.response?.data?.error || e.response?.data || e.message };
   }
 }
 
@@ -23,8 +23,18 @@ async function runLoadTest() {
   const requests = Array.from({ length: REQUEST_COUNT }, () => sendRequest());
   const results = await Promise.all(requests);
 
+  // ! DEBUG
+  // console.log('results', results);
+
   const successCount = results.filter(result => result.success).length;
   const failureCount = results.filter(result => !result.success).length;
+
+  // ! DEBUG
+  const successResults = results.filter(result => result.success);
+  const failureResults = results.filter(result => !result.success);
+  // console.log('successResults', successResults);
+  // console.log('failureResults', failureResults);
+  // ! DEBUG
 
   console.log(`Total Requests: ${REQUEST_COUNT}`);
   console.log(`Successful Requests: ${successCount}`);
@@ -37,7 +47,8 @@ async function runLoadTest() {
   console.log(`Test completed in ${(timer / 1000).toFixed(2)} sec.`);
 
   if (failureCount > 0) {
-    console.log('Sample Error:', results.find(result => !result.success).error);
+    console.error('Sample Error:', results.find(result => !result.success));
+    // console.error('results', results);
   }
 }
 

@@ -63,14 +63,20 @@ const updateBalance = async (req, res) => {
 	try {
 		await userService.updateUserBalance(userId, amount);
 
-		console.log(1)
+		// console.log(66, updatedUser);
 
-		const user = await userService.getOneUserById(userId);
-
-		res.status(200).json({ balance: user.balance });
+		// res.status(200).json({ balance: updatedUser.balance });
+		res.status(200).json({ balance: 0 });
 	} catch (e) {
 		// next(e); // TODO:
-		res.status(500).json({ error: ERROR_MESSAGES.INTERNAL_SERVER() });
+
+		// TODO: custom errors
+		if (e.message?.includes('funds')) {
+			res.status(409).json({ error: ERROR_MESSAGES.INVALID_BALANCE_VALUE() });
+		} else {
+			console.error('user.controller.js', 'updateBalance()', 'e.message', e.message);
+			res.status(500).json({ error: ERROR_MESSAGES.INTERNAL_SERVER() });
+		}
 	}
 };
 
