@@ -22,6 +22,7 @@ const getUserBalance = async (userId) => {
 };
 
 // TODO: 1. дать адекватную ошибку rest api на запросы 5000 после того как баланс равен 0 (может уже есть - надо отключить сначала логгер)
+// ! TODO: 2. Нормально разобраться с решениями ниже и с параллелизмом
 
 const updateUserBalance = async (userId, amount) => {
   try {
@@ -35,6 +36,10 @@ const updateUserBalance = async (userId, amount) => {
 		 * RETURNING id, balance
 		 */
 
+		/**
+		 * 1. Primary version (sequelize query)
+		 */
+		// const [updatedRows] = await User.update(
     const [count, [updatedUser]] = await User.update(
 			{
         balance: Sequelize.literal(`balance + ${amount}`), // Insert raw subquery —— SET balance = balance + <value>
@@ -63,7 +68,60 @@ const updateUserBalance = async (userId, amount) => {
 			throw new Error('Not enough funds');
 		}
 
-		return updatedUser;
+		// console.log(70, updatedUser);
+
+    return updatedUser;
+    // return await getUserBalance(userId); // TODO:
+
+		//
+
+		// TODO:
+		/**
+		 * 2. Alternate version (sequelize raw query)
+		 */
+		// await sequelize.query(
+		// 	`
+		// 		UPDATE users
+		// 		SET balance = balance + :amount
+		// 		WHERE id = :userId
+		// 		${amount < 0 ? 'AND balance >= :checkAmount' : ''}
+		// 	`,
+		// 	{
+		// 		replacements: {
+		// 			amount,
+		// 			userId,
+		// 			checkAmount: -amount
+		// 		}
+		// 	}
+		// );
+
+		// TODO:
+		/**
+		 * 3. Another alternate version (sequelize transaction)
+		 */
+		// await sequelize.transaction(async (t) => {
+		// 	const [count] = await User.update(
+		// 		{ balance: Sequelize.literal(`balance - ${amount}`) },
+		// 		{
+		// 			where: { id: fromUserId, balance: { [Op.gte]: amount } },
+		// 			transaction: t
+		// 		}
+		// 	);
+
+		// 	if (count === 0) {
+		// 		return res.status(400).json({ error: ERROR_MESSAGES.INVALID_BALANCE_VALUE() });
+		// 		// TODO: errors
+		// 		// throw new Error('Not enough funds');
+		// 	}
+
+		// 	await User.update(
+		// 		{ balance: Sequelize.literal(`balance + ${amount}`) },
+		// 		{
+		// 			where: { id: userId },
+		// 			transaction: t
+		// 		}
+		// 	);
+		// });
   } catch (e) {
     console.error('user.service.js', 'updateUserBalance()', 'e', e);
     throw e; // TODO: custom error
@@ -74,6 +132,7 @@ const updateUserBalance = async (userId, amount) => {
 	try {
 		const { balance } = await getUserBalance(1);
 		await updateUserBalance(1, 10000 - balance);
+		// await updateUserBalance(1, 10 - balance); // ! DEBUG
 	} catch (e) {
 		console.error(e);
     throw e; // TODO: custom error

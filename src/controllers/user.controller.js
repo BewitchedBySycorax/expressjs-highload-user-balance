@@ -61,12 +61,9 @@ const updateBalance = async (req, res) => {
 	}
 
 	try {
-		await userService.updateUserBalance(userId, amount);
+		const updatedUser = await userService.updateUserBalance(userId, amount);
 
-		// console.log(66, updatedUser);
-
-		// res.status(200).json({ balance: updatedUser.balance });
-		res.status(200).json({ balance: 0 });
+		res.status(200).json({ balance: updatedUser.balance });
 	} catch (e) {
 		// next(e); // TODO:
 
