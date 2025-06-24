@@ -1,7 +1,11 @@
 const { Sequelize } = require('sequelize');
+
+// TODO: убрать это
 // const { sequelize } = require('../utils/umzug');
 // const { sequelize } = require('../db/connection');
-const { sequelize } = require('../db/models');
+// const { sequelize } = require('../db/models');
+// TODO: убрать это
+
 const { User } = require('../db/models');
 
 const getOneUserById = async (userId) => {
@@ -26,8 +30,6 @@ const getUserBalance = async (userId) => {
 
 // TODO: 1. дать адекватную ошибку rest api на запросы 5000 после того как баланс равен 0 (может уже есть - надо отключить сначала логгер)
 // ! TODO: 2. Нормально разобраться с решениями ниже и с параллелизмом
-// ! TODO: 3. без дублей схемы (или вынести или .init ? - спросить в чатах)
-// ! TODO: 4. Декомпозиция utils и т п (см. чат)
 
 const updateUserBalance = async (userId, amount) => {
   try {
