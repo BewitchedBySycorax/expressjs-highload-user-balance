@@ -1,8 +1,9 @@
+// const { sequelize } = require('./models'); // ! Do not use this as it may cause conflict in case there are no models yet but migrations run
 const { Sequelize } = require('sequelize');
 const { Umzug, SequelizeStorage } = require('umzug');
 
 const env = process.env.NODE_ENV || 'development';
-const config = require('./config/config.json')[env];
+const config = require('../config/config.json')[env];
 
 const sequelize = new Sequelize(
   config.database,
@@ -15,17 +16,6 @@ const sequelize = new Sequelize(
     logging: false
   },
 );
-
-const dbConnect = async () => {
-  await sequelize.sync({ logging: false });
-
-  try {
-    await sequelize.authenticate({ logging: false });
-    console.log('Connection to the database has been established successfully.');
-  } catch (e) {
-    console.error('Unable to connect to the database:', e);
-  }
-};
 
 const dbRunMigrations = async () => {
   /**
@@ -55,7 +45,5 @@ const dbRunMigrations = async () => {
 };
 
 module.exports = {
-  dbConnect,
   dbRunMigrations,
-  sequelize,
 };

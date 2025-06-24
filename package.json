@@ -4,9 +4,12 @@
   "description": "A simple web application to manage user balances.",
   "main": "src/index.js",
   "scripts": {
-    "dev:db:create": "NODE_ENV=development npx sequelize-cli db:create",
-    "dev": "NODE_ENV=development node --watch --env-file=.env src/index.js",
-    "start": "NODE_ENV=development node --env-file=.env src/index.js"
+    "db:create": "cross-env NODE_ENV=development npx sequelize-cli db:create",
+    "db:drop": "npx sequelize-cli db:drop",
+    "dev:db:sync:force": "cross-env NODE_ENV=development DB_SYNC_MODE=force node --watch --env-file=.env src/index.js",
+    "dev:db:sync": "cross-env NODE_ENV=development DB_SYNC_MODE=safe node --watch --env-file=.env src/index.js",
+    "dev": "cross-env NODE_ENV=development node --watch --env-file=.env src/index.js",
+    "prod": "cross-env NODE_ENV=production node --env-file=.env src/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,11 +25,12 @@
     "express": "^5.1.0",
     "pg": "^8.16.0",
     "sequelize": "^6.37.7",
-    "sequelize-cli": "^6.6.2",
     "umzug": "^3.8.2"
   },
   "devDependencies": {
     "axios": "^1.10.0",
+    "cross-env": "^7.0.3",
+    "sequelize-cli": "^6.6.3",
     "undici": "^7.10.0"
   }
 }

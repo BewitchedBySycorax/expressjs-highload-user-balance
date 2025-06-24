@@ -10,10 +10,30 @@ const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
 let sequelize;
+
+// Connection Pool: https://sequelize.org/docs/v6/other-topics/connection-pool/
+// Sequelize (Public Constructors): https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-constructor-constructor
+const poolOptions = {
+  max: 5,
+  min: 0,
+  acquire: 30000,
+  idle: 10000
+};
+
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], { ...config, logging: false });
+  // sequelize = new Sequelize(process.env[config.use_env_variable], { ...config });
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    ...config,
+    logging: false,
+    pool: { ...poolOptions },
+  });
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, { ...config,  logging: false });
+  // sequelize = new Sequelize(config.database, config.username, config.password, { ...config });
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    ...config,
+    logging: false,
+    pool: { ...poolOptions },
+  });
 }
 
 fs

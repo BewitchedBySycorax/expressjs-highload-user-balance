@@ -1,30 +1,14 @@
 const { DataTypes } = require('sequelize');
-// const { sequelize } = require('../connection');
+const userSchema = require('../schemas/user.schema');
 
-// TODO:
-module.exports = (sequelize) => {
-  return sequelize.define('User', {
-    balance: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 10000,
-    },
-  }, {
-    tableName: 'users',
-    timestamps: false,
-  });
-};
+const User = (sequelize) => sequelize.define('User', userSchema(DataTypes), {
+  tableName: 'users',
 
-// TODO:
-// const User = sequelize.define('User', {
-//   balance: {
-//     type: DataTypes.INTEGER,
-//     allowNull: false,
-//     defaultValue: 10000,
-//   },
-// }, {
-//   tableName: 'users',
-//   timestamps: false,
-// })
+  // Timestamps: https://sequelize.org/docs/v6/core-concepts/model-basics/#timestamps
+  // timestamps: true, // default
+  // timestamps: false,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
+});
 
-// module.exports = User;
+module.exports = User;

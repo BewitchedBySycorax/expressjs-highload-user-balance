@@ -1,5 +1,6 @@
 const app = require('./app');
-const { dbConnect, dbRunMigrations } = require('./db/connection');
+// const { User } = require('./db/models'); // ! DEBUG
+const { dbInit } = require('./db/utils');
 
 if (process.env.NODE_ENV !== 'production') {
 	process.on('unhandledRejection', (reason, _promise) => {
@@ -13,10 +14,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 ;(async () => {
 	try {
-		const PORT = process.env.PORT || 3000;
 
-		await dbConnect();
-		await dbRunMigrations();
+		await dbInit();
+
+		// ! DEBUG
+		// await User.create({ balance: 15000 });
+		// await User.update({ balance: 15000 }, { where: { id: 1 }});
+		// ! DEBUG
+
+		const PORT = process.env.PORT || 3000;
 
 		app.listen(
 			PORT,
