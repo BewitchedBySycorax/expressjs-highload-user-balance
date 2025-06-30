@@ -1,7 +1,8 @@
-const { DataTypes } = require('sequelize');
+// const { DataTypes } = require('sequelize'); // TODO: убрать это
 const userSchema = require('../schemas/user.schema');
 
-const User = (sequelize) => sequelize.define('User', userSchema(DataTypes), {
+// const User = (sequelize) => sequelize.define('User', userSchema(DataTypes), {
+const User = (sequelize) => sequelize.define('User', userSchema, {
   tableName: 'users',
 
   // Timestamps: https://sequelize.org/docs/v6/core-concepts/model-basics/#timestamps

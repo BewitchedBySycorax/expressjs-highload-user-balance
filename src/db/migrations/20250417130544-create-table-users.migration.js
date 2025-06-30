@@ -2,9 +2,10 @@ const userSchema = require('../schemas/user.schema');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
-    const Sequelize = queryInterface.sequelize.constructor;
+    // const Sequelize = queryInterface.sequelize.constructor;
 
-    await queryInterface.createTable('users', userSchema(Sequelize));
+    // await queryInterface.createTable('users', userSchema(Sequelize));
+    await queryInterface.createTable('users', userSchema);
     await queryInterface.bulkInsert('users', [{
       balance: 10000,
       created_at: new Date(),

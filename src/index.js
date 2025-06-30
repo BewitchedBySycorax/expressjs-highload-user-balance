@@ -1,5 +1,5 @@
 const app = require('./app');
-// const { User } = require('./db/models'); // ! DEBUG
+// const { User } = require('./db/models'); // DEBUG
 const { dbInit } = require('./db/utils');
 
 if (process.env.NODE_ENV !== 'production') {
@@ -17,10 +17,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 		await dbInit();
 
-		// ! DEBUG
+		// DEBUG
 		// await User.create({ balance: 15000 });
-		// await User.update({ balance: 15000 }, { where: { id: 1 }});
-		// ! DEBUG
+		// await User.update({ balance: 49000 }, { where: { id: 1 }});
+		// await User.update({ balance: 37000 }, { where: { id: 3 }});
+		// DEBUG
 
 		const PORT = process.env.PORT || 3000;
 
