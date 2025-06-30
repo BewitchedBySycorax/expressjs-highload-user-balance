@@ -14,7 +14,7 @@ let sequelize;
 // Connection Pool: https://sequelize.org/docs/v6/other-topics/connection-pool/
 // Sequelize (Public Constructors): https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-constructor-constructor
 const poolOptions = {
-  max: 5,
+  max: 5, // max is 30 (https://sequelize.org/docs/v6/other-topics/connection-pool/)
   min: 0,
   acquire: 30000,
   idle: 10000

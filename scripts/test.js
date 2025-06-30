@@ -41,7 +41,9 @@ async function sendUndiciPoolRequest(method, baseUrl, userId, amount) {
     });
 
     if (statusCode !== 200) {
-      throw new Error(`sendUndiciPoolRequest() request failed with status ${statusCode}`);
+      const errMsg = await body.text();
+      // throw new Error(`sendUndiciPoolRequest() request failed with status ${statusCode}`);
+      throw new Error(errMsg);
     }
 
     const responseData = await body.json();
@@ -178,9 +180,8 @@ async function runLoadTest(requestCount) {
 
   //
 
-  // * 1. Undici Pool
-  // const requests = Array.from({ length: requestCount }, () => sendUndiciPoolRequest('PATCH', HIGHLOAD_BASE_URL, USER_ID, AMOUNT));
-  // * Test completed in 2.94 sec.
+  // * 1. Undici Pool (5000/5000, CORRECT) // ~ 3 sec
+  const requests = Array.from({ length: requestCount }, () => sendUndiciPoolRequest('PATCH', HIGHLOAD_BASE_URL, USER_ID, AMOUNT));
 
   //
 
@@ -188,24 +189,24 @@ async function runLoadTest(requestCount) {
   // ! 2.1 Without pool (not 5000/5000, INCORRECT): Sample Error: { success: false, error: 'read ECONNRESET' }
   // const requests = Array.from({ length: requestCount }, () => sendHttpRequest('PATCH', HIGHLOAD_BASE_URL, USER_ID, AMOUNT));
   //
-  // * 2.2 With pool (not 5000/5000, INCORRECT)
-  const body = JSON.stringify({ amount: AMOUNT });
-  const options = {
-    hostname: HIGHLOAD_BASE_URL.hostname,
-    port: HIGHLOAD_BASE_URL.port,
-    path: `${HIGHLOAD_BASE_URL.pathname}/${USER_ID}/balance`,
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': body.length
-    }
-  };
-  const pool = new HttpConnectionPool(options, 10);
-  const requests = Array.from({ length: requestCount }, () => pool.sendRequest(body));
+  // * 2.2 With pool (5000/5000, CORRECT) // ~ 3 sec
+  // const body = JSON.stringify({ amount: AMOUNT });
+  // const options = {
+  //   hostname: HIGHLOAD_BASE_URL.hostname,
+  //   port: HIGHLOAD_BASE_URL.port,
+  //   path: `${HIGHLOAD_BASE_URL.pathname}/${USER_ID}/balance`,
+  //   method: 'PATCH',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Content-Length': body.length
+  //   }
+  // };
+  // const pool = new HttpConnectionPool(options, 10);
+  // const requests = Array.from({ length: requestCount }, () => pool.sendRequest(body));
 
   //
 
-  // 3. Axios
+  // * 3. Axios (5000/5000, CORRECT) // ~ 5-6 sec
   // const requests = Array.from({ length: requestCount }, () => sendAxiosRequest(HIGHLOAD_BASE_URL, USER_ID, AMOUNT));
 
   //
@@ -214,7 +215,7 @@ async function runLoadTest(requestCount) {
 
   // ! DEBUG
   // console.log('requests', requests);
-  // console.log('results', results);
+  // console.log('results', results.slice(results.length - 10, results.length));
   // ! DEBUG
 
   const successCount = results.filter(result => result.success).length;

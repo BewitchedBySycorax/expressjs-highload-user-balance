@@ -1,17 +1,8 @@
 const { Sequelize } = require('sequelize');
-
-// TODO: убрать это
-// const { sequelize } = require('../utils/umzug');
-// const { sequelize } = require('../db/connection');
-// const { sequelize } = require('../db/models');
-// TODO: убрать это
-
 const { User } = require('../db/models');
 
 const getOneUserById = async (userId) => {
   try {
-		const user = await User.findByPk(userId);
-		console.log(9, user);
     return await User.findByPk(userId);
   } catch (e) {
     // console.error(e);
@@ -28,9 +19,6 @@ const getUserBalance = async (userId) => {
   }
 };
 
-// TODO: 1. дать адекватную ошибку rest api на запросы 5000 после того как баланс равен 0 (может уже есть - надо отключить сначала логгер)
-// ! TODO: 2. Нормально разобраться с решениями ниже и с параллелизмом
-
 const updateUserBalance = async (userId, amount) => {
   try {
 		/**
@@ -46,7 +34,6 @@ const updateUserBalance = async (userId, amount) => {
 		/**
 		 * 1. Primary version (sequelize query)
 		 */
-		// const [updatedRows] = await User.update(
     const [count, [updatedUser]] = await User.update(
 			{
         balance: Sequelize.literal(`balance + ${amount}`), // Insert raw subquery —— SET balance = balance + <value>
@@ -75,18 +62,12 @@ const updateUserBalance = async (userId, amount) => {
 			throw new Error('Not enough funds');
 		}
 
-		// console.log(70, updatedUser);
-
-    return updatedUser;
-    // return await getUserBalance(userId); // TODO:
-
 		//
 
-		// TODO:
 		/**
 		 * 2. Alternate version (sequelize raw query)
 		 */
-		// await sequelize.query(
+		// const [_, updatedUser] = await sequelize.query(
 		// 	`
 		// 		UPDATE users
 		// 		SET balance = balance + :amount
@@ -102,49 +83,22 @@ const updateUserBalance = async (userId, amount) => {
 		// 	}
 		// );
 
-		// TODO:
-		/**
-		 * 3. Another alternate version (sequelize transaction)
-		 */
-		// await sequelize.transaction(async (t) => {
-		// 	const [count] = await User.update(
-		// 		{ balance: Sequelize.literal(`balance - ${amount}`) },
-		// 		{
-		// 			where: { id: fromUserId, balance: { [Op.gte]: amount } },
-		// 			transaction: t
-		// 		}
-		// 	);
+		// if (updatedUser?.rowCount === 0) {
+		// 	// TODO: custom error
+		// 	throw new Error('Not enough funds');
+		// }
 
-		// 	if (count === 0) {
-		// 		return res.status(400).json({ error: ERROR_MESSAGES.INVALID_BALANCE_VALUE() });
-		// 		// TODO: errors
-		// 		// throw new Error('Not enough funds');
-		// 	}
+		//
 
-		// 	await User.update(
-		// 		{ balance: Sequelize.literal(`balance + ${amount}`) },
-		// 		{
-		// 			where: { id: userId },
-		// 			transaction: t
-		// 		}
-		// 	);
-		// });
+		// DEBUG
+		// console.log('user.service.js', 'updateUserBalance()', 'updatedUser', updatedUser);
+
+    return updatedUser;
   } catch (e) {
     console.error('user.service.js', 'updateUserBalance()', 'e', e);
     throw e; // TODO: custom error
   }
 };
-
-;(async () => {
-	try {
-		// const { balance } = await getUserBalance(1);
-		// await updateUserBalance(1, 10000 - balance);
-		// await updateUserBalance(1, 10 - balance); // ! DEBUG
-	} catch (e) {
-		console.error(e);
-    throw e; // TODO: custom error
-	}
-})();
 
 module.exports = {
   getOneUserById,

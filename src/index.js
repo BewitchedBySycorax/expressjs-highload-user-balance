@@ -1,6 +1,10 @@
 const app = require('./app');
-// const { User } = require('./db/models'); // DEBUG
 const { dbInit } = require('./db/utils');
+
+// DEBUG
+// const { User } = require('./db/models');
+const { getUserBalance, updateUserBalance } = require('./services/user.service');
+// DEBUG
 
 if (process.env.NODE_ENV !== 'production') {
 	process.on('unhandledRejection', (reason, _promise) => {
@@ -21,6 +25,10 @@ if (process.env.NODE_ENV !== 'production') {
 		// await User.create({ balance: 15000 });
 		// await User.update({ balance: 49000 }, { where: { id: 1 }});
 		// await User.update({ balance: 37000 }, { where: { id: 3 }});
+		//
+		const { balance } = await getUserBalance(1);
+		await updateUserBalance(1, 10000 - balance);
+		// await updateUserBalance(1, 10 - balance); // DEBUG
 		// DEBUG
 
 		const PORT = process.env.PORT || 3000;
